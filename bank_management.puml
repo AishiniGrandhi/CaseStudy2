@@ -1,0 +1,68 @@
+@startuml Bank Management System
+
+abstract class Account {
+    -accountNumber: String
+    -accountHolder: String
+    -balance: float
+    +deposit(amount: float): void
+    +withdraw(amount: float): void
+    +getBalance(): float
+    +getAccountDetails(): String
+}
+
+class SavingsAccount {
+    -interestRate: float
+    +calculateInterest(): float
+    +applyInterest(): void
+}
+
+class CurrentAccount {
+    -overdraftLimit: float
+    +withdraw(amount: float): void
+    +getOverdraftLimit(): float
+    +setOverdraftLimit(limit: float): boolean
+}
+
+class Customer {
+    -customerId: String
+    -name: String
+    -address: String
+    -phoneNumber: String
+    -email: String
+    -accounts: List<Account>
+    +addAccount(account: Account): void
+    +removeAccount(accountNumber: String): void
+    +getAccounts(): List<Account>
+}
+
+class Bank {
+    -bankName: String
+    -customers: List<Customer>
+    +addCustomer(customer: Customer): void
+    +removeCustomer(customerId: String): void
+    +findCustomer(customerId: String): Customer
+    +findAccount(accountNumber: String): Account
+}
+
+class Transaction {
+    -transactionId: String
+    -date: DateTime
+    -type: TransactionType
+    -amount: float
+    -accountNumber: String
+    +getTransactionDetails(): String
+}
+
+enum TransactionType {
+    DEPOSIT
+    WITHDRAWAL
+    TRANSFER
+}
+
+Account <|-- SavingsAccount
+Account <|-- CurrentAccount
+Bank "1" *-- "many" Customer
+Customer "1" *-- "many" Account
+Account "1" -- "many" Transaction
+
+@enduml
